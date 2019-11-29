@@ -1,4 +1,5 @@
 FROM ubuntu
+MAINTAINER Ray van Toll
 
 RUN apt-get update && apt-get install -y openssh-server xauth 
 RUN mkdir /var/run/sshd \
@@ -8,7 +9,7 @@ RUN mkdir /var/run/sshd \
 RUN sed -i "s/^.*X11Forwarding.*$/X11Forwarding yes/g" /etc/ssh/sshd_config
 RUN sed -i "s/^.*X11UseLocalhost.*$/X11UseLocalhost no/g" /etc/ssh/sshd_config
 RUN sed -i "s/^.*PasswordAuthentication.*$/PasswordAuthentication no/g" /etc/ssh/sshd_config
-RUN grep "^X11UseLocalhost" /etc/ssh/sshd_config || echo "X11UseLocalhost no" >> /etc/ssh/sshd_config
+RUN sed -i "s/^.*PermitUserEnvironment.*$/PermitUserEnvironment yes/g" /etc/ssh/sshd_config
 
 ADD ./entrypoint.sh .
 RUN chmod +x /entrypoint.sh
